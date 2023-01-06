@@ -1,0 +1,42 @@
+version: '3'
+services:
+  api:
+    container_name: api
+    build: .
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - '7777:7777'
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - api-network
+
+  redis:
+    container_name: redis
+    image: redis:5
+    restart: always
+    ports:
+      - '6379:6379'
+    networks:
+      - api-network
+
+  mongo:
+    container_name: mongo
+    image: mongo:6.0
+    restart: always
+    environment:
+      MONGO_DATA_DIR: /data/db
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - '27017:27017'
+    networks:
+      - api-network
+
+volumes:
+  mongo-data:
+networks:
+  api-network:

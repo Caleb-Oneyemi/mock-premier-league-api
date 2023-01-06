@@ -15,7 +15,7 @@ export const logger = createLogger({
         return `[mock-premier-league-api: ${timestamp} ${level}: ${stack}`
       }
 
-      return `[mock-premier-league-api: ${timestamp as string}] ${level}: ${message}`
+      return `[mock-premier-league-api: ${timestamp}] ${level}: ${message}`
     }),
   ),
   transports: [new transports.Console()],

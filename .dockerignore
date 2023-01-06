@@ -1,0 +1,10 @@
+node_modules/
+dist
+README.md
+yarn-error.log
+.git
+.gitignore
+.env
+.env.prod
+.vscode
+.editorconfig

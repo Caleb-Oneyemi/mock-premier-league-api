@@ -3,7 +3,7 @@ import config from 'config'
 import { app } from './app'
 import { logger } from './common'
 
-const port = config.get('port')
+const port = config.get<number>('port')
 
 const server = app.listen(port, () => {
   logger.debug(`listening on port ${port}...`)

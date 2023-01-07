@@ -1,4 +1,5 @@
 {
+  "env": "NODE_ENV",
   "port": "PORT",
   "mongoUrl": "MONGO_URL",
   "redisUrl": "REDIS_URL",
@@ -6,5 +7,10 @@
   "admin": {
     "username": "ADMIN_USERNAME",
     "password": "ADMIN_PASSWORD"
+  },
+  "rateLimiter": {
+    "allowedRequestsInWindow": "RATE_LIMITER_ALLOWED_REQUESTS",
+    "requestWindowInSeconds": "RATE_LIMITER_REQUEST_WINDOW",
+    "retryAfterInSeconds": "RATE_LIMITER_RETRY_AFTER"
   }
 }

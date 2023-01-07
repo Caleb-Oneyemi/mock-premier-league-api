@@ -2,11 +2,11 @@ import { Router } from 'express'
 import { CREATED, OK } from 'http-status'
 
 import * as Ctrl from '../controllers'
-import { Auth, wrapCtrl } from '../../../common'
+import { Auth, rateLimiter, wrapCtrl } from '../../../common'
 
 const router = Router()
 
-router.post('/', wrapCtrl(CREATED, Ctrl.createAppUser))
+router.post('/', rateLimiter, wrapCtrl(CREATED, Ctrl.createAppUser))
 
 router.post('/login', wrapCtrl(OK, Ctrl.login))
 

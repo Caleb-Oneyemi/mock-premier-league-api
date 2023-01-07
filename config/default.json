@@ -1,4 +1,5 @@
 {
+  "env": "development",
   "port": 7777,
   "mongoUrl": "",
   "redisUrl": "",
@@ -6,5 +7,10 @@
   "admin": {
     "username": "",
     "password": ""
+  },
+  "rateLimiter": {
+    "allowedRequestsInWindow": "100",
+    "requestWindowInSeconds": "100",
+    "retryAfterInSeconds": "100"
   }
 }

@@ -1,10 +1,10 @@
 import { z } from 'zod'
 
-export const createUserSchema = z
+export const userSchema = z
   .object({
     username: z.string().trim().min(2).max(50),
     password: z.string().trim().min(8).max(50),
   })
   .strict()
 
-export type CreateUserInput = z.infer<typeof createUserSchema>
+export type User = z.infer<typeof userSchema>

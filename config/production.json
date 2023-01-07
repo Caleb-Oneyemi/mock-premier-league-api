@@ -2,6 +2,7 @@
   "port": 7777,
   "mongoUrl": "",
   "redisUrl": "",
+  "jwtSecret": "",
   "admin": {
     "username": "",
     "password": ""

@@ -2,6 +2,7 @@
   "port": "PORT",
   "mongoUrl": "MONGO_URL",
   "redisUrl": "REDIS_URL",
+  "jwtSecret": "JWT_SECRET",
   "admin": {
     "username": "ADMIN_USERNAME",
     "password": "ADMIN_PASSWORD"

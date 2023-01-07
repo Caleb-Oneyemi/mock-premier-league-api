@@ -1,5 +1,4 @@
-import { client } from '../redisClient'
-import { logger } from '../common'
+import { logger, client } from '../common'
 
 client
   .connect()

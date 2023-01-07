@@ -1,6 +1,6 @@
 import Redis from 'ioredis'
 import config from 'config'
-import { logger } from './common'
+import { logger } from '.'
 
 const url = config.get<string>('redisUrl')
 

@@ -2,8 +2,7 @@ import config from 'config'
 import mongoose from 'mongoose'
 
 import { app } from './app'
-import { logger } from './common'
-import { client as redis } from './redisClient'
+import { logger, client as redis } from './common'
 
 import './startup'
 

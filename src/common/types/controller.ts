@@ -1,4 +1,5 @@
 import { ResponseData } from './response'
+import { RequestUser } from './user'
 
 /**
  T represents the type expected in the request body while
@@ -13,6 +14,7 @@ export interface ControllerInput<
   input: T
   params: U
   query: V
+  user?: RequestUser
 }
 
 export type ControllerFn = (input: ControllerInput) => Promise<ResponseData>

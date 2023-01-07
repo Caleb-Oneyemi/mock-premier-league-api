@@ -19,7 +19,7 @@ export class Auth {
       if (!user) {
         throw new AuthenticationError('session expired, login again')
       }
-      return user
+      return { ...user, publicId: payload.id }
     } catch (err) {
       if (err instanceof TokenExpiredError) {
         throw new AuthenticationError('session expired, login again')
@@ -33,6 +33,7 @@ export class Auth {
     try {
       const user = await Auth.authenticate(req)
       if (user?.role === UserTypes.ADMIN_USER) {
+        req.user = user
         return next()
       }
 
@@ -45,7 +46,11 @@ export class Auth {
   static async isAppUser(req: Request, res: Response, next: NextFunction) {
     try {
       const user = await Auth.authenticate(req)
-      if (user?.role === UserTypes.APP_USER) {
+      if (
+        user?.role === UserTypes.APP_USER ||
+        user?.role === UserTypes.ADMIN_USER
+      ) {
+        req.user = user
         return next()
       }
 

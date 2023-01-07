@@ -1,5 +1,9 @@
 {
   "port": 7777,
   "mongoUrl": "",
-  "redisUrl": ""
+  "redisUrl": "",
+  "admin": {
+    "username": "",
+    "password": ""
+  }
 }

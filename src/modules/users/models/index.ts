@@ -17,7 +17,7 @@ const userSchema = new Schema<UserAttributes>(
       trim: true,
       minlength: 7,
     },
-    type: {
+    role: {
       type: String,
       required: true,
       enum: [...Object.keys(UserTypes)],

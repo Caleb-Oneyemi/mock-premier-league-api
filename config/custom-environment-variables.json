@@ -1,5 +1,9 @@
 {
   "port": "PORT",
   "mongoUrl": "MONGO_URL",
-  "redisUrl": "REDIS_URL"
+  "redisUrl": "REDIS_URL",
+  "admin": {
+    "username": "ADMIN_USERNAME",
+    "password": "ADMIN_PASSWORD"
+  }
 }

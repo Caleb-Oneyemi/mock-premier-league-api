@@ -4,7 +4,7 @@ import { UserTypes } from '../../../common'
 export interface UserAttributes {
   username: string
   password: string
-  type: keyof typeof UserTypes
+  role: keyof typeof UserTypes
 }
 
 export interface UserDoc extends UserAttributes, Document {

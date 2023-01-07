@@ -6,14 +6,10 @@ import { validateToken, getSession } from '../utils'
 import { UserTypes } from '../constants'
 
 export class Auth {
-  private static async authenticate(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) {
+  private static async authenticate(req: Request) {
     const token = req.headers.authorization?.split('Bearer ')[1]
     if (!token) {
-      return next(new AuthenticationError('not authenticated'))
+      throw new AuthenticationError('not authenticated')
     }
 
     try {
@@ -35,7 +31,7 @@ export class Auth {
 
   static async isAdmin(req: Request, res: Response, next: NextFunction) {
     try {
-      const user = await Auth.authenticate(req, res, next)
+      const user = await Auth.authenticate(req)
       if (user?.role === UserTypes.ADMIN_USER) {
         return next()
       }
@@ -48,7 +44,7 @@ export class Auth {
 
   static async isAppUser(req: Request, res: Response, next: NextFunction) {
     try {
-      const user = await Auth.authenticate(req, res, next)
+      const user = await Auth.authenticate(req)
       if (user?.role === UserTypes.APP_USER) {
         return next()
       }

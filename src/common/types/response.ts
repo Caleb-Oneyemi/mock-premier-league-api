@@ -2,7 +2,7 @@ import { ErrorResult } from '../errors'
 
 type ResponseRecord = Record<string, any>
 
-type ResponseData = Array<ResponseRecord> | ResponseRecord | null | void
+export type ResponseData = Array<ResponseRecord> | ResponseRecord | null | void
 
 export interface SuccessResponse {
   data: ResponseData

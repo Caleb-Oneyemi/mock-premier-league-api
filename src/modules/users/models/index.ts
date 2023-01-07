@@ -17,6 +17,12 @@ const userSchema = new Schema<UserAttributes>(
       trim: true,
       minlength: 7,
     },
+    publicId: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+    },
     role: {
       type: String,
       required: true,

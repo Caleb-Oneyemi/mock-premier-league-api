@@ -26,6 +26,7 @@
     "http-status": "^1.5.3",
     "ioredis": "^5.2.4",
     "mongoose": "^6.6.5",
+    "nanoid": "3.3.4",
     "winston": "^3.8.2",
     "zod": "^3.19.1"
   },

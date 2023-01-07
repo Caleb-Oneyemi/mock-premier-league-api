@@ -1,8 +1,6 @@
 import { UserTypes } from '../../../common'
 import { User } from '../models'
-import { UserAttributes } from '../types'
-
-type BaseUser = Omit<UserAttributes, 'role'>
+import { BaseUser } from '../types'
 
 export const createAdminUser = async (input: BaseUser) => {
   return User.build({ ...input, role: UserTypes.ADMIN_USER })

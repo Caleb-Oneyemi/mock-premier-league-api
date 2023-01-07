@@ -6,7 +6,7 @@ export const createAdminUser = async (input: BaseUser) => {
   return User.build({ ...input, role: UserTypes.ADMIN_USER })
 }
 
-export const createRegularUser = async (input: BaseUser) => {
+export const createAppUser = async (input: BaseUser) => {
   return User.build({ ...input, role: UserTypes.APP_USER })
 }
 

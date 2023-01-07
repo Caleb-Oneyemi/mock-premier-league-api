@@ -1,5 +1,5 @@
 import { BaseUser } from '../types'
-import { createRegularUser, getUserByUsername } from '../dal'
+import * as DAL from '../dal'
 import {
   hashPassword,
   isPasswordValid,
@@ -10,11 +10,10 @@ import {
   storeSession,
 } from '../../../common'
 
-export const createUser = async ({
-  username,
-  password,
-}: Omit<BaseUser, 'publicId'>) => {
-  const existingUser = await getUserByUsername(username)
+type UserInput = Omit<BaseUser, 'publicId'>
+
+export const handleCreateUser = async (username: string, password: string) => {
+  const existingUser = await DAL.getUserByUsername(username)
   if (existingUser) {
     throw new ConflictError('username already in use')
   }
@@ -24,21 +23,25 @@ export const createUser = async ({
     generatePublicId(),
   ])
 
-  const data = {
+  return {
     publicId,
     username: username,
     password: hash,
   }
-
-  const result = await createRegularUser(data)
-  return result
 }
 
-export const loginUser = async ({
-  username,
-  password,
-}: Omit<BaseUser, 'publicId'>) => {
-  const existingUser = await getUserByUsername(username)
+export const createAppUser = async ({ username, password }: UserInput) => {
+  const data = await handleCreateUser(username, password)
+  return DAL.createAppUser(data)
+}
+
+export const createAdminUser = async ({ username, password }: UserInput) => {
+  const data = await handleCreateUser(username, password)
+  return DAL.createAdminUser(data)
+}
+
+export const login = async ({ username, password }: UserInput) => {
+  const existingUser = await DAL.getUserByUsername(username)
   if (!existingUser) {
     throw new AuthenticationError('invalid credentials')
   }

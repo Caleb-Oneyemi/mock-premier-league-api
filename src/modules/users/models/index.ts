@@ -10,7 +10,7 @@ const userSchema = new Schema<UserAttributes>(
       required: true,
       unique: true,
       trim: true,
-      minlength: 8,
+      minlength: 2,
       maxlength: 50,
     },
     password: {

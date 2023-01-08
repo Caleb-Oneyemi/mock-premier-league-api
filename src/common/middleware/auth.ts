@@ -29,7 +29,7 @@ export class Auth {
     }
   }
 
-  static async isAdmin(req: Request, res: Response, next: NextFunction) {
+  static async allowAdmin(req: Request, res: Response, next: NextFunction) {
     try {
       const user = await Auth.authenticate(req)
       if (user?.role === UserTypes.ADMIN_USER) {
@@ -43,7 +43,7 @@ export class Auth {
     }
   }
 
-  static async isAppUser(req: Request, res: Response, next: NextFunction) {
+  static async allowAllUsers(req: Request, res: Response, next: NextFunction) {
     try {
       const user = await Auth.authenticate(req)
       if (

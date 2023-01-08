@@ -10,6 +10,6 @@ router.post('/', rateLimiter, wrapCtrl(CREATED, Ctrl.createAppUser))
 
 router.post('/login', wrapCtrl(OK, Ctrl.login))
 
-router.post('/admin', Auth.isAdmin, wrapCtrl(CREATED, Ctrl.createAdminUser))
+router.post('/admin', Auth.allowAdmin, wrapCtrl(CREATED, Ctrl.createAdminUser))
 
 export { router as userRoutes }

@@ -1,5 +1,6 @@
 import crypto from 'crypto'
 import { promisify } from 'util'
+import validator from 'validator'
 
 const scrypt = promisify(crypto.scrypt)
 
@@ -16,5 +17,10 @@ export const isPasswordValid = async (password: string, hash: string) => {
   if (key === derivedKey.toString('hex')) {
     return true
   }
+  return false
+}
+
+export const isStrongPassword = (data: string) => {
+  if (validator.isStrongPassword(data)) return true
   return false
 }

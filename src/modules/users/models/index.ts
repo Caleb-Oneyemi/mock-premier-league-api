@@ -10,12 +10,13 @@ const userSchema = new Schema<UserAttributes>(
       required: true,
       unique: true,
       trim: true,
+      minlength: 8,
+      maxlength: 50,
     },
     password: {
       type: String,
       required: true,
       trim: true,
-      minlength: 7,
     },
     publicId: {
       type: String,

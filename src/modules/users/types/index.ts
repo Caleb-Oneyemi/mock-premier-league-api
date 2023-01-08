@@ -11,7 +11,7 @@ export interface UserAttributes {
 export type BaseUser = Omit<UserAttributes, 'role'>
 
 export interface UserDoc extends UserAttributes, Document {
-  id: string
+  _id: string
   createdAt: Date
   updatedAt: Date
 }

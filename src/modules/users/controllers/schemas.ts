@@ -11,4 +11,4 @@ export const userSchema = z
   })
   .strict()
 
-export type User = z.infer<typeof userSchema>
+export type UserSchemaType = z.infer<typeof userSchema>

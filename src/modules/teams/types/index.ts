@@ -24,12 +24,12 @@ export interface TeamModel extends Model<TeamDoc> {
 export type EditTeamInput = Partial<Omit<TeamAttributes, 'name'>>
 
 export interface NumberQuery {
-  minPlayerCount?: number
-  maxPlayerCount?: number
-  minMatches?: number
-  maxMatches?: number
-  minGoals?: number
-  maxGoals?: number
+  minPlayerCount?: string
+  maxPlayerCount?: string
+  minMatches?: string
+  maxMatches?: string
+  minGoals?: string
+  maxGoals?: string
 }
 
 interface Range {

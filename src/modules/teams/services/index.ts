@@ -15,10 +15,6 @@ export const editTeam = async (name: string, input: EditTeamInput) => {
   return DAL.editTeam(name, input)
 }
 
-export const getTeam = async (name: string) => {
-  return DAL.getTeam(name)
-}
-
 export const getTeams = async ({
   page = 1,
   limit = 10,

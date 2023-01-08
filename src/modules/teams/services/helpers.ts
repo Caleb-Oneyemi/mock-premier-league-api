@@ -19,7 +19,8 @@ export const buildTeamFilter = (
   }
 
   Object.keys(numberQueries).forEach((key) => {
-    const value = numberQueries[key as keyof NumberQuery]
+    // numbers coming in from req.query are in strings so convert
+    const value = Number(numberQueries[key as keyof NumberQuery])
 
     if (key.includes('min')) {
       const [, field] = key.split('min')

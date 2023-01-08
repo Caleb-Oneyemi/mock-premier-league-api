@@ -8,6 +8,7 @@ const teamSchema = new Schema<TeamAttributes>(
       required: true,
       unique: true,
       trim: true,
+      lowercase: true,
     },
     foundingYear: {
       type: String,
@@ -19,15 +20,18 @@ const teamSchema = new Schema<TeamAttributes>(
       type: String,
       required: true,
       trim: true,
+      lowercase: true,
     },
     owner: {
       type: String,
       required: true,
       trim: true,
+      lowercase: true,
     },
     coach: {
       type: String,
       trim: true,
+      lowercase: true,
     },
     playerCount: {
       type: Number,

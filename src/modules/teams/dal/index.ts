@@ -14,10 +14,6 @@ export const editTeam = async (name: string, input: EditTeamInput) => {
   return Team.findOneAndUpdate({ name }, input)
 }
 
-export const getTeam = async (name: string) => {
-  return Team.findOne({ name })
-}
-
 export const getTeams = async ({
   page,
   limit,
@@ -26,8 +22,8 @@ export const getTeams = async ({
 }: Required<Omit<QueryInput, 'search'>> & { filter: TeamFilter }) => {
   return Team.find(filter)
     .sort({ createdAt: sort })
-    .limit(limit)
-    .skip((page - 1) * limit)
+    .limit(+limit)
+    .skip((+page - 1) * +limit)
     .exec()
 }
 

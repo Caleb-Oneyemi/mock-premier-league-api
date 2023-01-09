@@ -22,8 +22,8 @@ export const getTeams = async ({
 }: Required<Omit<QueryInput, 'search'>> & { filter: TeamFilter }) => {
   return Team.find(filter)
     .sort({ createdAt: sort })
-    .limit(+limit)
-    .skip((+page - 1) * +limit)
+    .limit(limit)
+    .skip((page - 1) * limit)
     .exec()
 }
 

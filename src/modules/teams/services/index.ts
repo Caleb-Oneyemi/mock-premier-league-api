@@ -1,18 +1,26 @@
 import { buildTeamFilter } from './helpers'
 import * as DAL from '../dal'
 import { TeamAttributes, EditTeamInput, NumberQuery } from '../types'
-import { BadRequestError, QueryInput } from '../../../common'
+import { BadRequestError, NotFoundError, QueryInput } from '../../../common'
 
 export const addTeam = async (input: TeamAttributes) => {
   return DAL.addTeam(input)
 }
 
 export const removeTeam = async (name: string) => {
-  return DAL.removeTeam(name)
+  const result = await DAL.removeTeam(name.toLowerCase())
+  if (!result) {
+    throw new NotFoundError('team does not exist')
+  }
+  return result
 }
 
 export const editTeam = async (name: string, input: EditTeamInput) => {
-  return DAL.editTeam(name, input)
+  const result = await DAL.editTeam(name.toLowerCase(), input)
+  if (!result) {
+    throw new NotFoundError('team does not exist')
+  }
+  return result
 }
 
 export const getTeams = async ({

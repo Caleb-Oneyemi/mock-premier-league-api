@@ -2,7 +2,7 @@ import { Document, Model } from 'mongoose'
 
 export interface TeamAttributes {
   name: string
-  foundingYear: string
+  foundingYear: number
   stadium: string
   owner: string
   coach?: string
@@ -24,12 +24,12 @@ export interface TeamModel extends Model<TeamDoc> {
 export type EditTeamInput = Partial<Omit<TeamAttributes, 'name'>>
 
 export interface NumberQuery {
-  minPlayerCount?: string
-  maxPlayerCount?: string
-  minMatches?: string
-  maxMatches?: string
-  minGoals?: string
-  maxGoals?: string
+  minPlayerCount?: number
+  maxPlayerCount?: number
+  minMatches?: number
+  maxMatches?: number
+  minGoals?: number
+  maxGoals?: number
 }
 
 interface Range {

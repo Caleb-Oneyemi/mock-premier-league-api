@@ -28,10 +28,10 @@ export const buildTeamFilter = (
 
       if (!filter[dbField]) {
         Object.assign(filter, {
-          [dbField]: { $lte: value },
+          [dbField]: { $gte: value },
         })
       } else {
-        filter[dbField].$lte = value
+        filter[dbField].$gte = value
       }
     }
 
@@ -41,10 +41,10 @@ export const buildTeamFilter = (
 
       if (!filter[dbField]) {
         Object.assign(filter, {
-          [dbField]: { $gte: value },
+          [dbField]: { $lte: value },
         })
       } else {
-        filter[dbField].$gte = value
+        filter[dbField].$lte = value
       }
     }
   })

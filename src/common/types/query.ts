@@ -1,6 +1,6 @@
 export interface QueryInput {
-  page?: string | number
-  limit?: string | number
+  page?: number
+  limit?: number
   sort?: 'asc' | 'desc'
   search?: string
 }

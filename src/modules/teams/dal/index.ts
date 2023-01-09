@@ -11,7 +11,7 @@ export const removeTeam = async (name: string) => {
 }
 
 export const editTeam = async (name: string, input: EditTeamInput) => {
-  return Team.findOneAndUpdate({ name }, input)
+  return Team.findOneAndUpdate({ name }, input, { new: true }).exec()
 }
 
 export const getTeams = async ({
@@ -28,5 +28,5 @@ export const getTeams = async ({
 }
 
 export const getTeamCount = async (filter: TeamFilter) => {
-  return Team.countDocuments(filter)
+  return Team.countDocuments(filter).exec()
 }

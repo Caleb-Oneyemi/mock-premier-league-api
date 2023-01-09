@@ -11,9 +11,3 @@ export const isPositiveInteger = (input: string) => {
   if (!Number.isInteger(num) || num < 1) return false
   return true
 }
-
-export const isAlphabet = (input: string) => {
-  const res = input.match(/^[a-z]+$/i)
-  if (res == null) return false
-  return true
-}

@@ -11,10 +11,8 @@ const teamSchema = new Schema<TeamAttributes>(
       lowercase: true,
     },
     foundingYear: {
-      type: String,
+      type: Number,
       required: true,
-      minlength: 4,
-      maxlength: 4,
     },
     stadium: {
       type: String,
@@ -35,15 +33,12 @@ const teamSchema = new Schema<TeamAttributes>(
     },
     playerCount: {
       type: Number,
-      default: 0,
     },
     matches: {
       type: Number,
-      default: 0,
     },
     goals: {
       type: Number,
-      default: 0,
     },
   },
   {

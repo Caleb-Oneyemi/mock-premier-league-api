@@ -12,5 +12,8 @@
     "allowedRequestsInWindow": "RATE_LIMITER_ALLOWED_REQUESTS",
     "requestWindowInSeconds": "RATE_LIMITER_REQUEST_WINDOW",
     "retryAfterInSeconds": "RATE_LIMITER_RETRY_AFTER"
+  },
+  "cache": {
+    "ttlInDays": "CACHE_TTL_IN_DAYS"
   }
 }

@@ -12,5 +12,8 @@
     "allowedRequestsInWindow": "",
     "requestWindowInSeconds": "",
     "retryAfterInSeconds": ""
+  },
+  "cache": {
+    "ttlInDays": ""
   }
 }

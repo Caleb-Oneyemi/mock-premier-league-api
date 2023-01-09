@@ -31,7 +31,9 @@ export const getCachedResponse = async (
   return response
 }
 
-/** Default TTL is 3 days */
+/** Writes to cache if request method is GET, useCache is true and hashKey is present.
+ * Clears cache if method is not GET, clearCache is true and hasKey is present
+ * Also has a Default TTL of 3 days */
 export const handleCachingOperations = ({
   method,
   url,

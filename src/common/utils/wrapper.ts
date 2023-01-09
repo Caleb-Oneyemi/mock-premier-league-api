@@ -34,7 +34,6 @@ export const wrapCtrl = (status: number, fn: ControllerFn) => {
 
       result = await fn({ input: body, params, query, user })
 
-      // writes to cache if GET request or clears cache otherwise
       handleCachingOperations({
         method,
         url,

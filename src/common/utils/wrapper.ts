@@ -21,7 +21,7 @@ export const wrapCtrl = (status: number, fn: ControllerFn) => {
       } = req
 
       let result
-      if (method === 'GET' && useCache && hashKey) {
+      if (method.toLowerCase() === 'get' && useCache && hashKey) {
         result = await getCachedResponse(hashKey, req.url)
 
         if (result != null) {

@@ -1,4 +1,4 @@
-import { UserTypes } from '../constants'
+import { UserTypes } from '../common'
 
 export interface RequestUser {
   publicId: string

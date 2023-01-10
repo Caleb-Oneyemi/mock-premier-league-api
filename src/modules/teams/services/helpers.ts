@@ -1,4 +1,4 @@
-import { NumberQuery } from '../types'
+import { NumberQuery } from '../../../types'
 
 export const buildTeamFilter = (
   search: string | undefined,

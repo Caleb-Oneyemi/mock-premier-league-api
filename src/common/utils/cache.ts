@@ -2,7 +2,7 @@ import config from 'config'
 import mongoose from 'mongoose'
 import { logger } from '../logger'
 import { client as redis } from '../redisClient'
-import { Resource, ResponseData } from '../types'
+import { Resource, ResponseData } from '../../types'
 
 const TTL = config.get<string>('cache.ttlInDays')
 

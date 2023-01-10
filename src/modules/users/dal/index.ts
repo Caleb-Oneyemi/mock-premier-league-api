@@ -1,6 +1,6 @@
-import { UserTypes } from '../../../common'
 import { User } from '../models'
-import { BaseUser } from '../types'
+import { UserTypes } from '../../../common'
+import { BaseUser } from '../../../types'
 
 export const createAdminUser = async (input: BaseUser) => {
   return User.build({ ...input, role: UserTypes.ADMIN_USER })

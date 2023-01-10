@@ -1,5 +1,5 @@
 import { Document, Model } from 'mongoose'
-import { UserTypes } from '../../../common'
+import { UserTypes } from '../../common'
 
 export interface UserAttributes {
   publicId: string

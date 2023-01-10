@@ -1,7 +1,7 @@
 import httpStatus from 'http-status'
 import { Request, NextFunction } from 'express'
 
-import { CustomResponse } from '../types'
+import { CustomResponse } from '../../types'
 import { CustomError } from '../errors'
 import { logger } from '../logger'
 import { formatMongoError, isMongoError } from '../utils'

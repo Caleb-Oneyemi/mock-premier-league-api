@@ -1,7 +1,8 @@
 import { Document, Model } from 'mongoose'
-import { FixtureTypes } from '../../../common'
+import { FixtureTypes } from '../../common/constants'
 
 export interface FixtureAttributes {
+  publicId: string
   link: string
   homeTeam: string
   awayTeam: string

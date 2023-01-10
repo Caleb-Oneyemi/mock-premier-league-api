@@ -2,7 +2,7 @@ import { Request, NextFunction } from 'express'
 import { ZodError } from 'zod'
 
 import { BadRequestError } from '../errors'
-import { ControllerFn, CustomResponse } from '../types'
+import { ControllerFn, CustomResponse } from '../../types'
 import { getCachedResponse, handleCachingOperations } from './cache'
 
 export const wrapCtrl = (status: number, fn: ControllerFn) => {

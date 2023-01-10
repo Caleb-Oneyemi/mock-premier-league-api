@@ -1,6 +1,6 @@
 import { ZodError } from 'zod'
-
-import { CustomError, ErrorResult } from './CustomError'
+import { CustomError } from './CustomError'
+import { ErrorResult } from '../../types'
 
 export class BadRequestError extends CustomError {
   statusCode = 400

@@ -1,4 +1,5 @@
-import { CustomError, ErrorResult } from './CustomError'
+import { CustomError } from './CustomError'
+import { ErrorResult } from '../../types'
 
 export class AuthenticationError extends CustomError {
   statusCode = 401

@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose'
 
-import { UserAttributes, UserDoc, UserModel } from '../types'
+import { UserAttributes, UserDoc, UserModel } from '../../../types'
 import { UserTypes } from '../../../common'
 
 const userSchema = new Schema<UserAttributes>(

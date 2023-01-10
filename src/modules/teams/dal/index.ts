@@ -1,6 +1,10 @@
 import { Team } from '../models'
-import { TeamAttributes, TeamFilter, EditTeamInput } from '../types'
-import { QueryInput } from '../../../common'
+import {
+  TeamAttributes,
+  TeamFilter,
+  EditTeamInput,
+  QueryInput,
+} from '../../../types'
 
 export const addTeam = async (input: TeamAttributes) => {
   return Team.build(input)

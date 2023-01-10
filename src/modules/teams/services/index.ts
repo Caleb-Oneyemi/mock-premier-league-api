@@ -1,7 +1,14 @@
 import { buildTeamFilter } from './helpers'
 import * as DAL from '../dal'
-import { TeamAttributes, EditTeamInput, NumberQuery } from '../types'
-import { BadRequestError, NotFoundError, QueryInput } from '../../../common'
+
+import {
+  TeamAttributes,
+  EditTeamInput,
+  NumberQuery,
+  QueryInput,
+} from '../../../types'
+
+import { BadRequestError, NotFoundError } from '../../../common'
 
 export const addTeam = async (input: TeamAttributes) => {
   return DAL.addTeam(input)

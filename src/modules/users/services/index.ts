@@ -1,5 +1,6 @@
-import { BaseUser } from '../types'
 import * as DAL from '../dal'
+import { BaseUser } from '../../../types'
+
 import {
   hashPassword,
   isPasswordValid,

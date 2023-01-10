@@ -1,4 +1,5 @@
-import { RequestUser, Resource } from '../../types'
+import { RequestUser } from '../../user'
+import { Resource } from '../../resources'
 
 declare module 'express' {
   interface Request {

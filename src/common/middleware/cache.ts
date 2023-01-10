@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { Resource } from '../types'
+import { Resource } from '../../types'
 
 export const useCache = (hashKey: Resource) => {
   return (req: Request, res: Response, next: NextFunction) => {

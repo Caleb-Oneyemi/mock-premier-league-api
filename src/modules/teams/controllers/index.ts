@@ -8,7 +8,7 @@ import {
 } from './schemas'
 
 import * as TeamService from '../services'
-import { ControllerInput } from '../../../common'
+import { ControllerInput } from '../../../types'
 
 export const addTeam = async ({
   input,

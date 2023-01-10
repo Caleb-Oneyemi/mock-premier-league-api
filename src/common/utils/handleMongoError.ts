@@ -2,7 +2,7 @@ import httpStatus from 'http-status'
 import mongoose from 'mongoose'
 import { logger } from '../logger'
 import { mongoErrors } from '../constants'
-import { FormatMongoErrorInput, FormatMongoErrorResult } from '../types'
+import { FormatMongoErrorInput, FormatMongoErrorResult } from '../../types'
 
 const { CastError, ValidationError } = mongoose.Error
 

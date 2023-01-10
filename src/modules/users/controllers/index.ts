@@ -1,6 +1,6 @@
 import { userSchema, UserSchemaType } from './schemas'
 import * as UserService from '../services'
-import { ControllerInput } from '../../../common'
+import { ControllerInput } from '../../../types'
 
 export const createAppUser = async ({
   input,

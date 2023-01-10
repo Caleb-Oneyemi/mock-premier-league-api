@@ -1,4 +1,4 @@
-import { ErrorResult } from '../errors'
+import { ErrorResult } from './response'
 
 export interface FormatMongoErrorResult {
   errors: Array<ErrorResult>

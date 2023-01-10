@@ -9,8 +9,3 @@ export abstract class CustomError extends Error {
 
   abstract serializeErrors(): { message: string; field?: string }[]
 }
-
-export interface ErrorResult {
-  message: string
-  field?: string
-}

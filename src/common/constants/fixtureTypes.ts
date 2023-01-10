@@ -1,4 +1,4 @@
 export const FixtureTypes = Object.freeze({
-  PENDING: 'PENDING',
-  COMPLETED: 'COMPLETED',
+  pending: 'pending',
+  completed: 'completed',
 })

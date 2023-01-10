@@ -1,11 +1,18 @@
 import { z } from 'zod'
-import { genericQuerySchema, isValidDate, isValidFormat } from '../../../common'
+import {
+  FixtureTypes,
+  genericQuerySchema,
+  isValidDate,
+  isValidFormat,
+} from '../../../common'
+
+const { pending, completed } = FixtureTypes
 
 export const createFixtureSchema = z
   .object({
     homeTeam: z.string().trim(),
     awayTeam: z.string().trim(),
-    status: z.enum(['PENDING', 'COMPLETED']),
+    status: z.enum([pending, completed]),
     date: z
       .string()
       .trim()
@@ -30,7 +37,7 @@ export type EditFixtureSchemaType = z.infer<typeof editFixtureSchema>
 
 export const getFixturesSchema = genericQuerySchema
   .extend({
-    status: z.enum(['PENDING', 'COMPLETED']),
+    status: z.enum([pending, completed]),
     dateAfter: z
       .string()
       .trim()

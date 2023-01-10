@@ -28,18 +28,22 @@ export const buildTeamFilterQuery = (
       const [, field] = key.split('min')
       const dbField = (field[0].toLowerCase() + field.slice(1)) as DbField
 
-      query[dbField]
-        ? (query[dbField] = { $gte: value })
-        : (query[dbField]!.$gte = value)
+      if (!query[dbField]) {
+        query[dbField] = { $gte: value }
+      } else {
+        query[dbField]!.$gte = value
+      }
     }
 
     if (key.includes('max')) {
       const [, field] = key.split('max')
       const dbField = (field[0].toLowerCase() + field.slice(1)) as DbField
 
-      query[dbField]
-        ? (query[dbField] = { $lte: value })
-        : (query[dbField]!.$lte = value)
+      if (!query[dbField]) {
+        query[dbField] = { $lte: value }
+      } else {
+        query[dbField]!.$lte = value
+      }
     }
   })
 

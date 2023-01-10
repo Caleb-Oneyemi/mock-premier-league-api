@@ -5,16 +5,16 @@ import { testRedis } from '../../../test/redis'
 
 const request = supertest(app)
 
-const id = 'addTeamId'
+const id = 'editTeamId'
 const validToken = generateToken(id)
 const validSession = JSON.stringify({
-  username: 'addTeam',
+  username: 'editTeam',
   role: UserTypes.ADMIN_USER,
 })
 
-describe('Add Team Tests', () => {
-  test('Team creation fails when user is not authenticated', async () => {
-    const result = await request.post('/api/teams').send({})
+describe('Edit Team Tests', () => {
+  test('Editing team fails when user is not authenticated', async () => {
+    const result = await request.patch('/api/teams/publicId').send({})
 
     expect(result.statusCode).toBe(401)
     expect(result.body).toEqual({
@@ -23,8 +23,7 @@ describe('Add Team Tests', () => {
     })
   })
 
-  test('Team creation fails validation when authenticated user is not an admin', async () => {
-    const id = 'publicId'
+  test('Editing team fails when authenticated user is not an admin', async () => {
     const token = generateToken(id)
     const sessionValue = JSON.stringify({
       username: 'username',
@@ -34,7 +33,7 @@ describe('Add Team Tests', () => {
     await testRedis.set(id, sessionValue)
 
     const result = await request
-      .post('/api/teams')
+      .patch(`/api/teams/${id}`)
       .set('Authorization', `Bearer ${token}`)
       .send({})
 
@@ -45,31 +44,28 @@ describe('Add Team Tests', () => {
     })
   })
 
-  test('Team creation with authenticated admin fails validation when required input is not provided', async () => {
+  test('Editing team with authenticated admin fails validation when no input is provided', async () => {
     await testRedis.set(id, validSession)
 
     const result = await request
-      .post('/api/teams')
+      .patch(`/api/teams/${id}`)
       .set('Authorization', `Bearer ${validToken}`)
       .send({})
 
     expect(result.statusCode).toBe(400)
     expect(result.body).toEqual({
       errors: [
-        { message: 'Required', field: 'name' },
-        { message: 'Required', field: 'foundingYear' },
-        { message: 'Required', field: 'stadium' },
-        { message: 'Required', field: 'owner' },
+        { message: 'update must contain at least one property', field: '' },
       ],
       isSuccess: false,
     })
   })
 
-  test('Team creation with authenticated admin fails validation when name, stadium, owner or coach is below 2 characters long', async () => {
+  test('Editing team with authenticated admin fails validation when name, stadium, owner or coach is below 2 characters long', async () => {
     await testRedis.set(id, validSession)
 
     const result = await request
-      .post('/api/teams')
+      .patch(`/api/teams/${id}`)
       .set('Authorization', `Bearer ${validToken}`)
       .send({ name: 'a', stadium: 'b', owner: 'c', coach: 'd' })
 
@@ -97,11 +93,11 @@ describe('Add Team Tests', () => {
     })
   })
 
-  test('Team creation with authenticated admin fails validation when name, stadium, owner or coach is more than 50 characters long', async () => {
+  test('Editing team with authenticated admin fails validation when name, stadium, owner or coach is more than 50 characters long', async () => {
     await testRedis.set(id, validSession)
 
     const result = await request
-      .post('/api/teams')
+      .patch(`/api/teams/${id}`)
       .set('Authorization', `Bearer ${validToken}`)
       .send({
         name: 'a'.repeat(51),
@@ -134,11 +130,11 @@ describe('Add Team Tests', () => {
     })
   })
 
-  test('Team creation with authenticated admin fails validation when name contains numbers or special characters besides underscore', async () => {
+  test('Editing team with authenticated admin fails validation when name contains numbers or special characters besides underscore', async () => {
     await testRedis.set(id, validSession)
 
     const result = await request
-      .post('/api/teams')
+      .patch(`/api/teams/${id}`)
       .set('Authorization', `Bearer ${validToken}`)
       .send({ name: 'name@1' })
 
@@ -155,11 +151,11 @@ describe('Add Team Tests', () => {
     })
   })
 
-  test('Team creation with authenticated admin fails validation when foundingYear is not a number', async () => {
+  test('Editing team with authenticated admin fails validation when foundingYear is not a number', async () => {
     await testRedis.set(id, validSession)
 
     const result = await request
-      .post('/api/teams')
+      .patch(`/api/teams/${id}`)
       .set('Authorization', `Bearer ${validToken}`)
       .send({ foundingYear: 'string' })
 
@@ -175,11 +171,11 @@ describe('Add Team Tests', () => {
     })
   })
 
-  test('Team creation with authenticated admin fails validation when foundingYear is before 1900', async () => {
+  test('Editing team with authenticated admin fails validation when foundingYear is before 1900', async () => {
     await testRedis.set(id, validSession)
 
     const result = await request
-      .post('/api/teams')
+      .patch(`/api/teams/${id}`)
       .set('Authorization', `Bearer ${validToken}`)
       .send({ foundingYear: 1899 })
 
@@ -195,12 +191,12 @@ describe('Add Team Tests', () => {
     })
   })
 
-  test('Team creation with authenticated admin fails validation when foundingYear is in the future', async () => {
+  test('Editing team with authenticated admin fails validation when foundingYear is in the future', async () => {
     await testRedis.set(id, validSession)
 
     const year = new Date().getFullYear() + 1
     const result = await request
-      .post('/api/teams')
+      .patch(`/api/teams/${id}`)
       .set('Authorization', `Bearer ${validToken}`)
       .send({ foundingYear: year })
 
@@ -216,11 +212,11 @@ describe('Add Team Tests', () => {
     })
   })
 
-  test('Team creation with authenticated admin fails validation when playerCount, matches or goals are not positive numbers', async () => {
+  test('Editing with authenticated admin fails validation when playerCount, matches or goals are not positive numbers', async () => {
     await testRedis.set(id, validSession)
 
     const result = await request
-      .post('/api/teams')
+      .patch(`/api/teams/${id}`)
       .set('Authorization', `Bearer ${validToken}`)
       .send({ playerCount: -1, matches: 'fifty', goals: {} })
 
@@ -244,28 +240,49 @@ describe('Add Team Tests', () => {
     })
   })
 
-  test('Team creation with authenticated admin succeeds when all requirements are met', async () => {
+  test('Editing team with authenticated admin fails when team with publicId does not exist', async () => {
+    await testRedis.set(id, validSession)
+
+    const result = await request
+      .patch(`/api/teams/${id}`)
+      .set('Authorization', `Bearer ${validToken}`)
+      .send({ name: 'liverpool' })
+
+    expect(result.statusCode).toBe(404)
+    expect(result.body).toEqual({
+      errors: [
+        {
+          message: 'team does not exist',
+        },
+      ],
+      isSuccess: false,
+    })
+  })
+
+  test('Editing team with authenticated admin succeeds when all requirements are met', async () => {
     await testRedis.set(id, validSession)
     const team = {
       name: 'manchester_united',
       foundingYear: 1950,
       stadium: 'old trafford',
       owner: 'owner',
-      coach: 'coach',
-      playerCount: 21,
-      matches: 100,
-      goals: 210,
     }
 
-    const result = await request
+    const { statusCode, body } = await request
       .post('/api/teams')
       .set('Authorization', `Bearer ${validToken}`)
       .send(team)
 
-    expect(result.statusCode).toBe(201)
-    expect(result.body.data.publicId).toBeDefined()
+    const publicId = body.data.publicId
+    const result = await request
+      .patch(`/api/teams/${publicId}`)
+      .set('Authorization', `Bearer ${validToken}`)
+      .send({ name: 'liverpool' })
+
+    expect(statusCode).toBe(201)
+    expect(result.statusCode).toBe(200)
     expect(result.body).toEqual({
-      data: expect.objectContaining(team),
+      data: expect.objectContaining({ name: 'liverpool' }),
       isSuccess: true,
     })
   })

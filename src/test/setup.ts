@@ -1,5 +1,4 @@
 import mongoose from 'mongoose'
-import Redis from 'ioredis-mock'
 import { testRedis } from './redis'
 
 beforeAll(async () => {
@@ -23,6 +22,6 @@ afterEach(async () => {
 
 jest.mock('../common/redisClient', () => {
   return {
-    client: new Redis(),
+    client: testRedis,
   }
 })

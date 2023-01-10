@@ -1,11 +1,12 @@
 import { Document, Model } from 'mongoose'
+import { TeamAttributes } from './teams'
 import { FixtureTypes } from '../../common/constants'
 
 export interface FixtureAttributes {
   publicId: string
   link: string
-  homeTeam: string
-  awayTeam: string
+  homeTeam: string | TeamAttributes
+  awayTeam: string | TeamAttributes
   stadium: string
   status: keyof typeof FixtureTypes
   date: Date

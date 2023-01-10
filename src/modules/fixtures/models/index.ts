@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose'
 import { FixtureTypes } from '../../../common'
-import { FixtureAttributes, FixtureDoc, FixtureModel } from '../types'
+import { FixtureAttributes, FixtureDoc, FixtureModel } from '../../../types'
 
 const fixtureSchema = new Schema<FixtureAttributes>(
   {
@@ -11,14 +11,12 @@ const fixtureSchema = new Schema<FixtureAttributes>(
       trim: true,
     },
     homeTeam: {
-      type: String,
-      required: true,
-      trim: true,
+      type: Schema.Types.ObjectId,
+      ref: 'Team',
     },
     awayTeam: {
-      type: String,
-      required: true,
-      trim: true,
+      type: Schema.Types.ObjectId,
+      ref: 'Teams',
     },
     stadium: {
       type: String,

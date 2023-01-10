@@ -1,3 +1,4 @@
+import config from 'config'
 import { buildFixtureFilterQuery, formatFixtures } from './helpers'
 import * as DAL from '../dal'
 
@@ -10,15 +11,22 @@ import {
 
 import {
   BadRequestError,
+  buildDate,
   generatePublicId,
   NotFoundError,
 } from '../../../common'
 
+const baseUrl = config.get<string>('baseUrl')
+
 export const addFixture = async (
-  input: Omit<FixtureAttributes, 'publicId'>,
+  input: Omit<FixtureAttributes, 'publicId' | 'link' | 'date'> & {
+    date: string
+  },
 ) => {
   const publicId = await generatePublicId()
-  return DAL.addFixture({ ...input, publicId })
+  const link = `${baseUrl}/api/fixtures/${publicId}`
+  const date = buildDate(input.date)
+  return DAL.addFixture({ ...input, publicId, link, date })
 }
 
 export const removeFixture = async (publicId: string) => {
@@ -31,9 +39,13 @@ export const removeFixture = async (publicId: string) => {
 
 export const editFixture = async (
   publicId: string,
-  input: EditFixtureInput,
+  input: Omit<EditFixtureInput, 'date'> & { date?: string | Date },
 ) => {
-  const result = await DAL.editFixture(publicId, input)
+  if (input.date) {
+    input.date = buildDate(input.date)
+  }
+
+  const result = await DAL.editFixture(publicId, input as EditFixtureInput)
   if (!result) {
     throw new NotFoundError('fixture does not exist')
   }

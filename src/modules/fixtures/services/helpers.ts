@@ -1,3 +1,4 @@
+import { buildDate } from '../../../common'
 import {
   FixtureAttributes,
   FixtureFilter,
@@ -28,8 +29,7 @@ export const buildFixtureFilterQuery = (
   }
 
   if (dateBefore) {
-    const [day, month, year] = dateBefore.split('/')
-    const date = new Date(+year, +month - 1, +day)
+    const date = buildDate(dateBefore)
 
     Object.assign<FixtureFilterQuery, Pick<FixtureFilterQuery, 'date'>>(query, {
       date: { $lte: date },
@@ -37,8 +37,7 @@ export const buildFixtureFilterQuery = (
   }
 
   if (dateAfter) {
-    const [day, month, year] = dateAfter.split('/')
-    const date = new Date(+year, +month - 1, +day)
+    const date = buildDate(dateAfter)
 
     Object.assign<FixtureFilterQuery, Pick<FixtureFilterQuery, 'date'>>(query, {
       date: { $gte: date },

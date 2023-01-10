@@ -1,4 +1,4 @@
-import { buildTeamFilter } from './helpers'
+import { buildTeamFilterQuery } from './helpers'
 import * as DAL from '../dal'
 
 import {
@@ -42,15 +42,20 @@ export const getTeams = async ({
   search,
   ...numberQueries
 }: QueryInput & NumberQuery) => {
-  const filter = buildTeamFilter(search, numberQueries)
-  const count = await DAL.getTeamCount(filter)
+  const query = buildTeamFilterQuery(search, numberQueries)
+  const count = await DAL.getTeamCount(query)
   const totalPages = Math.ceil(count / +limit) || 1
 
   if (+page > totalPages) {
     throw new BadRequestError('page number must be below total pages')
   }
 
-  const teams = await DAL.getTeams({ page: +page, limit: +limit, sort, filter })
+  const teams = await DAL.getTeams({
+    page: +page,
+    limit: +limit,
+    sort,
+    filter: query,
+  })
 
   return {
     teams,

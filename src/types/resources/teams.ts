@@ -46,3 +46,14 @@ export interface NumberFilter {
 
 export type TeamFilter = NumberFilter &
   Partial<Pick<TeamAttributes, 'coach' | 'name' | 'owner' | 'stadium'>>
+
+type Search = { $regex: string; $options: 'i' }
+
+export type TeamFilterQuery = {
+  $or?: [
+    { coach: Search },
+    { name: Search },
+    { owner: Search },
+    { stadium: Search },
+  ]
+} & NumberFilter

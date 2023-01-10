@@ -1,14 +1,14 @@
-import { NumberQuery } from '../../../types'
+import { NumberFilter, NumberQuery, TeamFilterQuery } from '../../../types'
 
-export const buildTeamFilter = (
+export const buildTeamFilterQuery = (
   search: string | undefined,
   numberQueries: NumberQuery,
 ) => {
-  const filter: Record<string, any> = {}
+  const query: TeamFilterQuery = {}
 
   if (search) {
-    const searchQuery = { $regex: search, $options: 'i' }
-    Object.assign(filter, {
+    const searchQuery = { $regex: search, $options: 'i' } as const
+    Object.assign<TeamFilterQuery, Pick<TeamFilterQuery, '$or'>>(query, {
       $or: [
         { coach: searchQuery },
         { name: searchQuery },
@@ -18,36 +18,30 @@ export const buildTeamFilter = (
     })
   }
 
+  type DbField = keyof NumberFilter
+
   Object.keys(numberQueries).forEach((key) => {
     // numbers coming in from req.query are in strings so convert
     const value = Number(numberQueries[key as keyof NumberQuery])
 
     if (key.includes('min')) {
       const [, field] = key.split('min')
-      const dbField = field[0].toLowerCase() + field.slice(1)
+      const dbField = (field[0].toLowerCase() + field.slice(1)) as DbField
 
-      if (!filter[dbField]) {
-        Object.assign(filter, {
-          [dbField]: { $gte: value },
-        })
-      } else {
-        filter[dbField].$gte = value
-      }
+      query[dbField]
+        ? (query[dbField] = { $gte: value })
+        : (query[dbField]!.$gte = value)
     }
 
     if (key.includes('max')) {
       const [, field] = key.split('max')
-      const dbField = field[0].toLowerCase() + field.slice(1)
+      const dbField = (field[0].toLowerCase() + field.slice(1)) as DbField
 
-      if (!filter[dbField]) {
-        Object.assign(filter, {
-          [dbField]: { $lte: value },
-        })
-      } else {
-        filter[dbField].$lte = value
-      }
+      query[dbField]
+        ? (query[dbField] = { $lte: value })
+        : (query[dbField]!.$lte = value)
     }
   })
 
-  return filter
+  return query
 }

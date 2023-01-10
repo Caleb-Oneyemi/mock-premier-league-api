@@ -34,10 +34,10 @@ export const formatMongoError = (
     }
 
     if (err?.code === 11000) {
-      const [key] = Object.keys(err.keyValue!)
+      const keys = Object.keys(err.keyValue!)
       return {
         status: httpStatus.CONFLICT,
-        errors: [{ message: `${key} already in use` }],
+        errors: [{ message: `${keys.join(' and ')} already exists` }],
       }
     }
 

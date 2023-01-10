@@ -37,3 +37,9 @@ export const getFixtures = async ({
   await getFixturesSchema.parseAsync(query)
   return FixtureService.getFixtures(query)
 }
+
+export const getFixtureByPublicId = async ({
+  params,
+}: ControllerInput<{}, { publicId: string }>) => {
+  return FixtureService.getFixtureByPublicId(params.publicId)
+}

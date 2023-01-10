@@ -5,43 +5,34 @@ import {
   FixtureFilterQuery,
 } from '../../../types'
 
-export const buildFixtureFilterQuery = (
-  search: string | undefined,
-  { status, dateAfter, dateBefore }: FixtureFilter,
-) => {
+export const buildFixtureFilterQuery = ({
+  status,
+  dateAfter,
+  dateBefore,
+}: FixtureFilter) => {
   const query: FixtureFilterQuery = {}
-  if (search) {
-    Object.assign<FixtureFilterQuery, Pick<FixtureFilterQuery, 'stadium'>>(
-      query,
-      {
-        stadium: { $regex: search, $options: 'i' },
-      },
-    )
-  }
-
   if (status) {
-    Object.assign<FixtureFilterQuery, Pick<FixtureFilterQuery, 'status'>>(
-      query,
-      {
-        status,
-      },
-    )
+    query.status = status
   }
 
   if (dateBefore) {
     const date = buildDate(dateBefore)
 
-    Object.assign<FixtureFilterQuery, Pick<FixtureFilterQuery, 'date'>>(query, {
-      date: { $lte: date },
-    })
+    if (!query.date) {
+      query.date = { $lte: date }
+    } else {
+      query.date.$lte = date
+    }
   }
 
   if (dateAfter) {
     const date = buildDate(dateAfter)
 
-    Object.assign<FixtureFilterQuery, Pick<FixtureFilterQuery, 'date'>>(query, {
-      date: { $gte: date },
-    })
+    if (!query.date) {
+      query.date = { $gte: date }
+    } else {
+      query.date.$gte = date
+    }
   }
 
   return query
@@ -49,11 +40,20 @@ export const buildFixtureFilterQuery = (
 
 export const formatFixtures = (fixtures: FixtureAttributes[]) => {
   return fixtures.map((fixture) => {
-    if (typeof fixture.homeTeam !== 'string') {
+    if (fixture.homeTeam && typeof fixture.homeTeam !== 'string') {
       fixture.stadium = fixture.homeTeam?.stadium
-      delete fixture.homeTeam.stadium
+      fixture.homeTeam.stadium = undefined
     }
 
     return fixture
   })
+}
+
+export const formatIndividualFixture = (fixture: FixtureAttributes) => {
+  if (fixture.homeTeam && typeof fixture.homeTeam !== 'string') {
+    fixture.stadium = fixture.homeTeam?.stadium
+    fixture.homeTeam.stadium = undefined
+  }
+
+  return fixture
 }

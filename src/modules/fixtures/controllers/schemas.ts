@@ -8,7 +8,7 @@ import {
 
 const { pending, completed } = FixtureTypes
 
-export const createFixtureSchema = z
+const baseFixtureSchema = z
   .object({
     homeTeam: z.string().trim(),
     awayTeam: z.string().trim(),
@@ -21,17 +21,38 @@ export const createFixtureSchema = z
   })
   .strict()
 
-export type CreateFixtureSchemaType = z.infer<typeof createFixtureSchema>
-
-export const editFixtureSchema = createFixtureSchema.partial().refine(
-  (input) => {
-    if (Object.keys(input).length === 0) return false
+export const createFixtureSchema = baseFixtureSchema.refine(
+  ({ homeTeam, awayTeam }) => {
+    if (homeTeam === awayTeam) return false
     return true
   },
   {
-    message: 'update must contain at least one property',
+    message: 'home and away team cannot be the same',
   },
 )
+
+export type CreateFixtureSchemaType = z.infer<typeof createFixtureSchema>
+
+export const editFixtureSchema = baseFixtureSchema
+  .partial()
+  .refine(
+    (input) => {
+      if (Object.keys(input).length === 0) return false
+      return true
+    },
+    {
+      message: 'update must contain at least one property',
+    },
+  )
+  .refine(
+    ({ homeTeam, awayTeam }) => {
+      if (typeof homeTeam === 'string' && homeTeam === awayTeam) return false
+      return true
+    },
+    {
+      message: 'home and away team cannot be the same',
+    },
+  )
 
 export type EditFixtureSchemaType = z.infer<typeof editFixtureSchema>
 

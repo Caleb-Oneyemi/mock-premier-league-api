@@ -45,3 +45,23 @@ export const getFixtures = async ({
 export const getFixtureCount = async (filter: FixtureFilter) => {
   return Fixture.countDocuments(filter).exec()
 }
+
+export const getFixtureByPublicId = async (
+  publicId: string,
+  populate?: boolean,
+) => {
+  if (!populate) {
+    return Fixture.findOne({ publicId })
+  }
+
+  return Fixture.findOne({ publicId })
+    .populate({
+      path: 'homeTeam',
+      select: 'name stadium',
+    })
+    .populate({
+      path: 'awayTeam',
+      select: 'name',
+    })
+    .exec()
+}

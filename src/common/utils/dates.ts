@@ -1,8 +1,4 @@
-export const buildDate = (date: string | Date) => {
-  if (date instanceof Date) {
-    return date
-  }
-
+export const buildDate = (date: string) => {
   const [day, month, year] = date.split('/')
   const result = new Date(+year, +month - 1, +day)
   return result
@@ -32,4 +28,6 @@ export const isValidDate = (date: string) => {
   if (buildDate(date) < new Date()) {
     return false
   }
+
+  return true
 }

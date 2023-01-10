@@ -14,6 +14,11 @@ const router = Router()
 
 router
   .get('/', rateLimiter, useCache('fixture'), wrapCtrl(OK, Ctrl.getFixtures))
+  .get('/:publicId', [
+    rateLimiter,
+    useCache('fixture'),
+    wrapCtrl(OK, Ctrl.getFixtureByPublicId),
+  ])
   .post('/', [
     Auth.allowAdmin,
     clearCache('fixture'),

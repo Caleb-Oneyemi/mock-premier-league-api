@@ -4,6 +4,12 @@ import { FixtureAttributes, FixtureDoc, FixtureModel } from '../../../types'
 
 const fixtureSchema = new Schema<FixtureAttributes>(
   {
+    publicId: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+    },
     link: {
       type: String,
       required: true,
@@ -16,12 +22,7 @@ const fixtureSchema = new Schema<FixtureAttributes>(
     },
     awayTeam: {
       type: Schema.Types.ObjectId,
-      ref: 'Teams',
-    },
-    stadium: {
-      type: String,
-      required: true,
-      trim: true,
+      ref: 'Team',
     },
     status: {
       type: String,
@@ -44,6 +45,8 @@ const fixtureSchema = new Schema<FixtureAttributes>(
     },
   },
 )
+
+fixtureSchema.index({ homeTeam: 1, awayTeam: 1 }, { unique: true })
 
 fixtureSchema.statics.build = (input: FixtureAttributes) => {
   return new Fixture(input).save()

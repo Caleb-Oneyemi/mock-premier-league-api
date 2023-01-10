@@ -1,6 +1,11 @@
 import config from 'config'
-import { buildFixtureFilterQuery, formatFixtures } from './helpers'
 import * as DAL from '../dal'
+
+import {
+  buildFixtureFilterQuery,
+  formatIndividualFixture,
+  formatFixtures,
+} from './helpers'
 
 import {
   FixtureAttributes,
@@ -39,13 +44,30 @@ export const removeFixture = async (publicId: string) => {
 
 export const editFixture = async (
   publicId: string,
-  input: Omit<EditFixtureInput, 'date'> & { date?: string | Date },
+  input: Omit<EditFixtureInput, 'date'> & { date?: string },
 ) => {
-  if (input.date) {
-    input.date = buildDate(input.date)
+  const existingFixture = await DAL.getFixtureByPublicId(publicId)
+
+  if (
+    !input.awayTeam &&
+    existingFixture?.awayTeam?.toString() === input.homeTeam
+  ) {
+    throw new BadRequestError('home and away team cannot be the same')
   }
 
-  const result = await DAL.editFixture(publicId, input as EditFixtureInput)
+  if (
+    !input.homeTeam &&
+    existingFixture?.homeTeam?.toString() === input.awayTeam
+  ) {
+    throw new BadRequestError('home and away team cannot be the same')
+  }
+
+  const date = input.date ? { date: buildDate(input.date) } : undefined
+  const result = await DAL.editFixture(publicId, {
+    ...input,
+    ...date,
+  } as EditFixtureInput)
+
   if (!result) {
     throw new NotFoundError('fixture does not exist')
   }
@@ -56,10 +78,9 @@ export const getFixtures = async ({
   page = 1,
   limit = 10,
   sort = 'desc',
-  search,
   ...filter
-}: QueryInput & FixtureFilter) => {
-  const filterQuery = buildFixtureFilterQuery(search, filter)
+}: Omit<QueryInput, 'search'> & FixtureFilter) => {
+  const filterQuery = buildFixtureFilterQuery(filter)
   const count = await DAL.getFixtureCount(filterQuery)
   const totalPages = Math.ceil(count / +limit) || 1
 
@@ -82,4 +103,14 @@ export const getFixtures = async ({
     currentPage: +page,
     totalPages,
   }
+}
+
+export const getFixtureByPublicId = async (publicId: string) => {
+  const result = await DAL.getFixtureByPublicId(publicId, true)
+  if (!result) {
+    throw new NotFoundError('fixture does not exist')
+  }
+
+  const formattedFixture = formatIndividualFixture(result)
+  return formattedFixture
 }

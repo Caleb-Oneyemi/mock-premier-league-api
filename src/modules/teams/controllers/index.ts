@@ -19,16 +19,16 @@ export const addTeam = async ({
 
 export const removeTeam = async ({
   params,
-}: ControllerInput<{}, { name: string }>) => {
-  return TeamService.removeTeam(params.name)
+}: ControllerInput<{}, { publicId: string }>) => {
+  return TeamService.removeTeam(params.publicId)
 }
 
 export const editTeam = async ({
   input,
   params,
-}: ControllerInput<EditTeamSchemaType, { name: string }>) => {
+}: ControllerInput<EditTeamSchemaType, { publicId: string }>) => {
   await editTeamSchema.parseAsync(input)
-  return TeamService.editTeam(params.name, input)
+  return TeamService.editTeam(params.publicId, input)
 }
 
 export const getTeams = async ({

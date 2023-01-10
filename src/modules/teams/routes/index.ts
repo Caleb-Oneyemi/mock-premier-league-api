@@ -19,12 +19,12 @@ router
     clearCache('team'),
     wrapCtrl(CREATED, Ctrl.addTeam),
   ])
-  .patch('/:name', [
+  .patch('/:publicId', [
     Auth.allowAdmin,
     clearCache('team'),
     wrapCtrl(OK, Ctrl.editTeam),
   ])
-  .delete('/:name', [
+  .delete('/:publicId', [
     Auth.allowAdmin,
     clearCache('team'),
     wrapCtrl(NO_CONTENT, Ctrl.removeTeam),

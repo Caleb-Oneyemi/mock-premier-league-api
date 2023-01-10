@@ -19,16 +19,16 @@ export const addTeam = async (input: Omit<TeamAttributes, 'publicId'>) => {
   return DAL.addTeam({ ...input, publicId })
 }
 
-export const removeTeam = async (name: string) => {
-  const result = await DAL.removeTeam(name.toLowerCase())
+export const removeTeam = async (publicId: string) => {
+  const result = await DAL.removeTeam(publicId)
   if (!result) {
     throw new NotFoundError('team does not exist')
   }
   return result
 }
 
-export const editTeam = async (name: string, input: EditTeamInput) => {
-  const result = await DAL.editTeam(name.toLowerCase(), input)
+export const editTeam = async (publicId: string, input: EditTeamInput) => {
+  const result = await DAL.editTeam(publicId, input)
   if (!result) {
     throw new NotFoundError('team does not exist')
   }

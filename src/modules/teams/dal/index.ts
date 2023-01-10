@@ -10,12 +10,12 @@ export const addTeam = async (input: TeamAttributes) => {
   return Team.build(input)
 }
 
-export const removeTeam = async (name: string) => {
-  return Team.findOneAndDelete({ name })
+export const removeTeam = async (publicId: string) => {
+  return Team.findOneAndDelete({ publicId })
 }
 
-export const editTeam = async (name: string, input: EditTeamInput) => {
-  return Team.findOneAndUpdate({ name }, input, { new: true }).exec()
+export const editTeam = async (publicId: string, input: EditTeamInput) => {
+  return Team.findOneAndUpdate({ publicId }, input, { new: true }).exec()
 }
 
 export const getTeams = async ({

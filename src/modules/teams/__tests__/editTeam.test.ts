@@ -171,7 +171,7 @@ describe('Edit Team Tests', () => {
     })
   })
 
-  test('Editing team with authenticated admin fails validation when foundingYear is before 1900', async () => {
+  test('Editing team with authenticated admin fails validation when foundingYear is before 1992', async () => {
     await testRedis.set(id, validSession)
 
     const result = await request
@@ -183,7 +183,7 @@ describe('Edit Team Tests', () => {
     expect(result.body).toEqual({
       errors: expect.arrayContaining([
         {
-          message: 'Number must be greater than or equal to 1900',
+          message: 'Number must be greater than or equal to 1992',
           field: 'foundingYear',
         },
       ]),
@@ -263,7 +263,7 @@ describe('Edit Team Tests', () => {
     await testRedis.set(id, validSession)
     const team = {
       name: 'manchester_united',
-      foundingYear: 1950,
+      foundingYear: 1995,
       stadium: 'old trafford',
       owner: 'owner',
     }

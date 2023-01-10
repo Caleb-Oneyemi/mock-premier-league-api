@@ -27,7 +27,7 @@ export const createTeamSchema = z
         isValidName,
         'name must either only alphabets or alphabets with underscore',
       ),
-    foundingYear: z.number().min(1900).max(new Date().getFullYear()),
+    foundingYear: z.number().min(1992).max(new Date().getFullYear()),
     stadium: z.string().trim().min(2).max(50),
     owner: z.string().trim().min(2).max(50),
     coach: z.string().trim().min(2).max(50).optional(),

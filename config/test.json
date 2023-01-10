@@ -1,0 +1,20 @@
+{
+  "env": "test",
+  "port": 7777,
+  "baseUrl": "",
+  "mongoUrl": "",
+  "redisUrl": "",
+  "jwtSecret": "",
+  "admin": {
+    "username": "",
+    "password": ""
+  },
+  "rateLimiter": {
+    "allowedRequestsInWindow": "",
+    "requestWindowInSeconds": "",
+    "retryAfterInSeconds": ""
+  },
+  "cache": {
+    "ttlInDays": ""
+  }
+}

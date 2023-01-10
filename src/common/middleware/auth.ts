@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { TokenExpiredError } from 'jsonwebtoken'
+import { TokenExpiredError, JsonWebTokenError } from 'jsonwebtoken'
 
 import { AuthenticationError, AuthorizationError } from '../errors'
 import { validateToken, getSession } from '../utils'
@@ -12,21 +12,13 @@ export class Auth {
       throw new AuthenticationError('not authenticated')
     }
 
-    try {
-      const payload = validateToken(token)
-      const user = await getSession(payload.id)
+    const payload = validateToken(token)
+    const user = await getSession(payload.id)
 
-      if (!user) {
-        throw new AuthenticationError('session expired, login again')
-      }
-      return { ...user, publicId: payload.id }
-    } catch (err) {
-      if (err instanceof TokenExpiredError) {
-        throw new AuthenticationError('session expired, login again')
-      }
-
-      throw new AuthenticationError('invalid token')
+    if (!user) {
+      throw new AuthenticationError('session expired, login again')
     }
+    return { ...user, publicId: payload.id }
   }
 
   static async allowAdmin(req: Request, res: Response, next: NextFunction) {
@@ -37,8 +29,16 @@ export class Auth {
         return next()
       }
 
-      next(new AuthorizationError('permission denied'))
+      throw new AuthorizationError('permission denied')
     } catch (err) {
+      if (err instanceof TokenExpiredError) {
+        next(new AuthenticationError('session expired, login again'))
+      }
+
+      if (err instanceof JsonWebTokenError) {
+        next(new AuthenticationError('invalid token'))
+      }
+
       next(err)
     }
   }
@@ -54,8 +54,16 @@ export class Auth {
         return next()
       }
 
-      next(new AuthorizationError('permission denied'))
+      throw new AuthorizationError('permission denied')
     } catch (err) {
+      if (err instanceof TokenExpiredError) {
+        next(new AuthenticationError('session expired, login again'))
+      }
+
+      if (err instanceof JsonWebTokenError) {
+        next(new AuthenticationError('invalid token'))
+      }
+
       next(err)
     }
   }

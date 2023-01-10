@@ -1,4 +1,6 @@
 import mongoose from 'mongoose'
+import Redis from 'ioredis-mock'
+import { testRedis } from './redis'
 
 beforeAll(async () => {
   await mongoose.connect(process.env.MONGO_URL!)
@@ -14,5 +16,13 @@ afterEach(async () => {
   const collections = await mongoose.connection.db.collections()
   for (const collection of collections) {
     await collection.deleteMany({})
+  }
+
+  await testRedis.flushall()
+})
+
+jest.mock('../common/redisClient', () => {
+  return {
+    client: new Redis(),
   }
 })

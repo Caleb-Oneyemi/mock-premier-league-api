@@ -39,18 +39,15 @@ export const createTeamSchema = z
 
 export type CreateTeamSchemaType = z.infer<typeof createTeamSchema>
 
-export const editTeamSchema = createTeamSchema
-  .omit({ name: true })
-  .partial()
-  .refine(
-    (input) => {
-      if (Object.keys(input).length === 0) return false
-      return true
-    },
-    {
-      message: 'update must contain at least one property',
-    },
-  )
+export const editTeamSchema = createTeamSchema.partial().refine(
+  (input) => {
+    if (Object.keys(input).length === 0) return false
+    return true
+  },
+  {
+    message: 'update must contain at least one property',
+  },
+)
 
 export type EditTeamSchemaType = z.infer<typeof editTeamSchema>
 

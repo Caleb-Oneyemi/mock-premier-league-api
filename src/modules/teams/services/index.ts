@@ -8,10 +8,15 @@ import {
   QueryInput,
 } from '../../../types'
 
-import { BadRequestError, NotFoundError } from '../../../common'
+import {
+  BadRequestError,
+  generatePublicId,
+  NotFoundError,
+} from '../../../common'
 
-export const addTeam = async (input: TeamAttributes) => {
-  return DAL.addTeam(input)
+export const addTeam = async (input: Omit<TeamAttributes, 'publicId'>) => {
+  const publicId = await generatePublicId()
+  return DAL.addTeam({ ...input, publicId })
 }
 
 export const removeTeam = async (name: string) => {

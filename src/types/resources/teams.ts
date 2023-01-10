@@ -1,6 +1,7 @@
 import { Document, Model } from 'mongoose'
 
 export interface TeamAttributes {
+  publicId: string
   name: string
   foundingYear: number
   stadium: string
@@ -21,7 +22,7 @@ export interface TeamModel extends Model<TeamDoc> {
   build(input: TeamAttributes): TeamDoc
 }
 
-export type EditTeamInput = Partial<Omit<TeamAttributes, 'name'>>
+export type EditTeamInput = Partial<Omit<TeamAttributes, 'publicId'>>
 
 export interface NumberQuery {
   minPlayerCount?: number

@@ -15,7 +15,7 @@
     "start": "dotenv node dist/index.js",
     "build": "tsc --project tsconfig.prod.json",
     "dev": "dotenv nodemon src/index.ts",
-    "test": "jest"
+    "test": "jest -i"
   },
   "dependencies": {
     "compression": "^1.7.4",

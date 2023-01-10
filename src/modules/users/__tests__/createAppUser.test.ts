@@ -1,5 +1,6 @@
 import supertest from 'supertest'
 import { app } from '../../../app'
+import { UserTypes } from '../../../common'
 
 const request = supertest(app)
 
@@ -125,7 +126,7 @@ describe('Create App User Tests', () => {
     expect(result.body).toMatchObject({
       data: {
         username: user.username,
-        role: 'APP_USER',
+        role: UserTypes.APP_USER,
       },
       isSuccess: true,
     })

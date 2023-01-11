@@ -22,9 +22,9 @@ export const buildFixtureFilterQuery = ({
     const date = buildDate(dateBefore)
 
     if (!query.date) {
-      query.date = { $lte: date }
+      query.date = { $lt: date }
     } else {
-      query.date.$lte = date
+      query.date.$lt = date
     }
   }
 
@@ -32,9 +32,9 @@ export const buildFixtureFilterQuery = ({
     const date = buildDate(dateAfter)
 
     if (!query.date) {
-      query.date = { $gte: date }
+      query.date = { $gt: date }
     } else {
-      query.date.$gte = date
+      query.date.$gt = date
     }
   }
 

@@ -2,6 +2,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server'
 
 const EnvVars = Object.freeze({
   JWT_SECRET: 'secret',
+  BASE_URL: 'http://url.com',
 })
 
 declare global {

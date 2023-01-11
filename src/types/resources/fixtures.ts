@@ -36,7 +36,7 @@ export interface FixtureFilterQuery {
   stadium?: { $regex: string; $options: 'i' }
   status?: keyof typeof FixtureTypes
   date?: {
-    $lte?: Date
-    $gte?: Date
+    $lt?: Date
+    $gt?: Date
   }
 }

@@ -1,3 +1,4 @@
+// ***************************************TEAMS***************************************
 export const teams = [
   {
     publicId: '1',
@@ -108,5 +109,89 @@ export const teams = [
     playerCount: 22,
     matches: 100,
     goals: 100,
+  },
+]
+
+// *************************************FIXTURES*************************************
+export const fixtures = [
+  {
+    publicId: '1',
+    link: 'api/fixtures/1',
+    homeTeam: '63bd84d357c871dd8ce30d29',
+    awayTeam: '63bd84bd57c871dd8ce30d27',
+    status: 'pending',
+    date: '10/10/2030',
+  },
+  {
+    publicId: '2',
+    link: 'api/fixtures/2',
+    homeTeam: '63bd84d357c871dd8ce30d29',
+    awayTeam: '63bd84a457c871dd8ce30d25',
+    status: 'pending',
+    date: '10/10/2031',
+  },
+  {
+    publicId: '3',
+    link: 'api/fixtures/3',
+    homeTeam: '63bd84d357c871dd8ce30d29',
+    awayTeam: '63bd75b6c3398c4ebdccd30d',
+    status: 'pending',
+    date: '10/10/2032',
+  },
+  {
+    publicId: '4',
+    link: 'api/fixtures/4',
+    homeTeam: '63bd84e457c871dd8ce30d2b',
+    awayTeam: '63bd84bd57c871dd8ce30d27',
+    status: 'pending',
+    date: '10/10/2033',
+  },
+  {
+    publicId: '5',
+    link: 'api/fixtures/5',
+    homeTeam: '63bd84e457c871dd8ce30d2b',
+    awayTeam: '63bd84a457c871dd8ce30d25',
+    status: 'pending',
+    date: '10/10/2034',
+  },
+  {
+    publicId: '6',
+    link: 'api/fixtures/6',
+    homeTeam: '63bd84e457c871dd8ce30d2b',
+    awayTeam: '63bd75b6c3398c4ebdccd30d',
+    status: 'completed',
+    date: '10/10/2035',
+  },
+  {
+    publicId: '7',
+    link: 'api/fixtures/7',
+    homeTeam: '63beafd1b1feb6f106cfa9f5',
+    awayTeam: '63bd84bd57c871dd8ce30d27',
+    status: 'completed',
+    date: '10/10/2036',
+  },
+  {
+    publicId: '8',
+    link: 'api/fixtures/8',
+    homeTeam: '63beafd1b1feb6f106cfa9f5',
+    awayTeam: '63bd84a457c871dd8ce30d25',
+    status: 'completed',
+    date: '10/10/2037',
+  },
+  {
+    publicId: '9',
+    link: 'api/fixtures/9',
+    homeTeam: '63beafd1b1feb6f106cfa9f5',
+    awayTeam: '63bd75b6c3398c4ebdccd30d',
+    status: 'completed',
+    date: '10/10/2038',
+  },
+  {
+    publicId: '10',
+    link: 'api/fixtures/10',
+    homeTeam: '63beafd1b1feb6f106cfa9f5',
+    awayTeam: '63bd75b6c3398c4ebdccd348',
+    status: 'completed',
+    date: '10/10/2039',
   },
 ]

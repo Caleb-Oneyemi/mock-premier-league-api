@@ -1,4 +1,3 @@
-import config from 'config'
 import * as DAL from '../dal'
 
 import {
@@ -21,15 +20,13 @@ import {
   NotFoundError,
 } from '../../../common'
 
-const baseUrl = config.get<string>('baseUrl')
-
 export const addFixture = async (
   input: Omit<FixtureAttributes, 'publicId' | 'link' | 'date'> & {
     date: string
   },
 ) => {
   const publicId = await generatePublicId()
-  const link = `${baseUrl}/api/fixtures/${publicId}`
+  const link = `api/fixtures/${publicId}`
   const date = buildDate(input.date)
   return DAL.addFixture({ ...input, publicId, link, date })
 }

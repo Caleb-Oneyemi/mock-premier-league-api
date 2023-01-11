@@ -33,11 +33,11 @@ export const getFixtures = async ({
     .skip((page - 1) * limit)
     .populate({
       path: 'homeTeam',
-      select: 'name stadium',
+      select: 'name stadium -_id',
     })
     .populate({
       path: 'awayTeam',
-      select: 'name',
+      select: 'name -_id',
     })
     .exec()
 }
@@ -57,11 +57,11 @@ export const getFixtureByPublicId = async (
   return Fixture.findOne({ publicId })
     .populate({
       path: 'homeTeam',
-      select: 'name stadium',
+      select: 'name stadium -_id',
     })
     .populate({
       path: 'awayTeam',
-      select: 'name',
+      select: 'name -_id',
     })
     .exec()
 }

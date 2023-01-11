@@ -33,6 +33,9 @@ const fixtureSchema = new Schema<FixtureAttributes>(
       type: Date,
       required: true,
     },
+    stadium: {
+      type: String,
+    },
   },
   {
     timestamps: true,

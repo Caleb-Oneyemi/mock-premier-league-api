@@ -1,9 +1,12 @@
+import config from 'config'
 import { buildDate } from '../../../common'
 import {
   FixtureAttributes,
   FixtureFilter,
   FixtureFilterQuery,
 } from '../../../types'
+
+const baseUrl = config.get<string>('baseUrl')
 
 export const buildFixtureFilterQuery = ({
   status,
@@ -38,22 +41,18 @@ export const buildFixtureFilterQuery = ({
   return query
 }
 
-export const formatFixtures = (fixtures: FixtureAttributes[]) => {
-  return fixtures.map((fixture) => {
-    if (fixture.homeTeam && typeof fixture.homeTeam !== 'string') {
-      fixture.stadium = fixture.homeTeam?.stadium
-      fixture.homeTeam.stadium = undefined
-    }
-
-    return fixture
-  })
-}
-
 export const formatIndividualFixture = (fixture: FixtureAttributes) => {
   if (fixture.homeTeam && typeof fixture.homeTeam !== 'string') {
     fixture.stadium = fixture.homeTeam?.stadium
     fixture.homeTeam.stadium = undefined
   }
 
+  fixture.link = `${baseUrl}/${fixture.link}`
   return fixture
+}
+
+export const formatFixtures = (fixtures: FixtureAttributes[]) => {
+  return fixtures.map((fixture) => {
+    return formatIndividualFixture(fixture)
+  })
 }

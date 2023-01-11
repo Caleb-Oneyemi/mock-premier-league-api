@@ -203,6 +203,50 @@ describe('Edit Fixture Tests', () => {
     })
   })
 
+  test('Editing fixture with authenticated admin fails when fixture with home and away team already exists', async () => {
+    await testRedis.set(id, validSession)
+    const fixture = {
+      homeTeam: '63bd75b6c3398c4ebdccd30e',
+      awayTeam: '63bd84a457c871dd8ce30d25',
+      status: 'completed',
+      date: `10/10/${new Date().getFullYear() + 1}`,
+    }
+
+    const first = await request
+      .post('/api/fixtures')
+      .set('Authorization', `Bearer ${validToken}`)
+      .send(fixture)
+    const second = await request
+      .post('/api/fixtures')
+      .set('Authorization', `Bearer ${validToken}`)
+      .send({
+        ...fixture,
+        awayTeam: fixture.homeTeam,
+        homeTeam: fixture.awayTeam,
+      })
+
+    const publicId = first.body.data.publicId
+    const result = await request
+      .patch(`/api/fixtures/${publicId}`)
+      .set('Authorization', `Bearer ${validToken}`)
+      .send({
+        awayTeam: fixture.homeTeam,
+        homeTeam: fixture.awayTeam,
+      })
+
+    expect(first.statusCode).toBe(201)
+    expect(second.statusCode).toBe(201)
+    expect(result.statusCode).toBe(409)
+    expect(result.body).toEqual({
+      errors: [
+        {
+          message: 'homeTeam and awayTeam already exists',
+        },
+      ],
+      isSuccess: false,
+    })
+  })
+
   test('Editing fixture succeeds when all requirements are met', async () => {
     await testRedis.set(id, validSession)
     const createResult = await request

@@ -47,6 +47,9 @@ export const editFixture = async (
   input: Omit<EditFixtureInput, 'date'> & { date?: string },
 ) => {
   const existingFixture = await DAL.getFixtureByPublicId(publicId)
+  if (!existingFixture) {
+    throw new NotFoundError('fixture does not exist')
+  }
 
   if (
     !input.awayTeam &&
@@ -62,7 +65,7 @@ export const editFixture = async (
     throw new BadRequestError('home and away team cannot be the same')
   }
 
-  const date = input.date ? { date: buildDate(input.date) } : undefined
+  const date = input.date ? { date: buildDate(input.date) } : {}
   const result = await DAL.editFixture(publicId, {
     ...input,
     ...date,

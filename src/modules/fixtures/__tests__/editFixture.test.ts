@@ -5,16 +5,22 @@ import { testRedis } from '../../../test/helpers'
 
 const request = supertest(app)
 
-const id = 'addTeamId'
+const id = 'editFixtureId'
 const validToken = generateToken(id)
 const validSession = JSON.stringify({
-  username: 'addTeam',
+  username: 'editFixture',
   role: UserTypes.ADMIN_USER,
 })
+const defaultFixture = {
+  homeTeam: '63bd75b6c3398c4ebdccd30e',
+  awayTeam: '63bd84a457c871dd8ce30d25',
+  status: 'pending',
+  date: `10/10/${new Date().getFullYear() + 1}`,
+}
 
-describe('Add Fixture Tests', () => {
-  test('Fixture creation fails when user is not authenticated', async () => {
-    const result = await request.post('/api/fixtures').send({})
+describe('Edit Fixture Tests', () => {
+  test('Editing fixture fails when user is not authenticated', async () => {
+    const result = await request.patch('/api/fixtures/publicId').send({})
 
     expect(result.statusCode).toBe(401)
     expect(result.body).toEqual({
@@ -23,18 +29,17 @@ describe('Add Fixture Tests', () => {
     })
   })
 
-  test('Fixture creation fails when authenticated user is not an admin', async () => {
-    const id = 'publicId'
+  test('Editing fixture fails when authenticated user is not an admin', async () => {
     const token = generateToken(id)
     const sessionValue = JSON.stringify({
-      username: 'username',
+      username: 'editFixtureUser',
       role: UserTypes.APP_USER,
     })
 
     await testRedis.set(id, sessionValue)
 
     const result = await request
-      .post('/api/fixtures')
+      .patch(`/api/fixtures/${id}`)
       .set('Authorization', `Bearer ${token}`)
       .send({})
 
@@ -45,32 +50,29 @@ describe('Add Fixture Tests', () => {
     })
   })
 
-  test('Fixture creation with authenticated admin fails validation when required input is not provided', async () => {
+  test('Editing fixture with authenticated admin fails validation when no input is provided', async () => {
     await testRedis.set(id, validSession)
 
     const result = await request
-      .post('/api/fixtures')
+      .patch(`/api/fixtures/${id}`)
       .set('Authorization', `Bearer ${validToken}`)
       .send({})
 
     expect(result.statusCode).toBe(400)
     expect(result.body).toEqual({
       errors: [
-        { message: 'Required', field: 'homeTeam' },
-        { message: 'Required', field: 'awayTeam' },
-        { message: 'Required', field: 'status' },
-        { message: 'Required', field: 'date' },
+        { message: 'update must contain at least one property', field: '' },
       ],
       isSuccess: false,
     })
   })
 
-  test('Fixture creation with authenticated admin fails validation when valid status is not provided', async () => {
+  test('Editing fixture with authenticated admin fails validation when valid status is not provided', async () => {
     await testRedis.set(id, validSession)
 
     const invalidStatus = 'done'
     const result = await request
-      .post('/api/fixtures')
+      .patch(`/api/fixtures/${id}`)
       .set('Authorization', `Bearer ${validToken}`)
       .send({ status: invalidStatus })
 
@@ -86,12 +88,12 @@ describe('Add Fixture Tests', () => {
     })
   })
 
-  test('Fixture creation with authenticated admin fails validation when date is not in the valid DD/MM/YYYY format', async () => {
+  test('Editing fixture with authenticated admin fails validation when date is not in the valid DD/MM/YYYY format', async () => {
     await testRedis.set(id, validSession)
 
     const invalidDate = '2023/11/01'
     const result = await request
-      .post('/api/fixtures')
+      .patch(`/api/fixtures/${id}`)
       .set('Authorization', `Bearer ${validToken}`)
       .send({ date: invalidDate })
 
@@ -107,12 +109,12 @@ describe('Add Fixture Tests', () => {
     })
   })
 
-  test('Fixture creation with authenticated admin fails validation when date is not in the future', async () => {
+  test('Editing fixture with authenticated admin fails validation when date is not in the future', async () => {
     await testRedis.set(id, validSession)
 
     const invalidDate = '01/11/2020'
     const result = await request
-      .post('/api/fixtures')
+      .patch(`/api/fixtures/${id}`)
       .set('Authorization', `Bearer ${validToken}`)
       .send({ date: invalidDate })
 
@@ -128,84 +130,113 @@ describe('Add Fixture Tests', () => {
     })
   })
 
-  test('Fixture creation with authenticated admin fails validation when home team and away team are the same', async () => {
+  test('Editing fixture with authenticated admin fails validation when fixture with Id does not exist', async () => {
     await testRedis.set(id, validSession)
 
-    const sameTeamId = '63bd75b6c3398c4ebdccd30e'
     const result = await request
-      .post('/api/fixtures')
+      .patch(`/api/fixtures/${id}`)
       .set('Authorization', `Bearer ${validToken}`)
       .send({
-        homeTeam: sameTeamId,
-        awayTeam: sameTeamId,
-        status: 'pending',
-        date: `10/10/${new Date().getFullYear() + 1}`,
+        status: 'completed',
       })
 
+    expect(result.statusCode).toBe(404)
+    expect(result.body).toEqual({
+      errors: [{ message: 'fixture does not exist' }],
+      isSuccess: false,
+    })
+  })
+
+  test('Editing fixture with authenticated admin fails validation when homeTeam or awayTeam mongo Ids are invalid', async () => {
+    await testRedis.set(id, validSession)
+    const createResult = await request
+      .post('/api/fixtures')
+      .set('Authorization', `Bearer ${validToken}`)
+      .send(defaultFixture)
+
+    const publicId = createResult.body.data.publicId
+    const result = await request
+      .patch(`/api/fixtures/${publicId}`)
+      .set('Authorization', `Bearer ${validToken}`)
+      .send({
+        awayTeam: 'invalidId2',
+        homeTeam: 'invalidId1',
+      })
+
+    expect(createResult.statusCode).toBe(201)
+    expect(result.statusCode).toBe(400)
+    expect(result.body).toEqual({
+      errors: expect.arrayContaining([
+        {
+          message: 'Invalid awayTeam',
+          field: 'awayTeam',
+        },
+      ]),
+      isSuccess: false,
+    })
+  })
+
+  test('Editing fixture with authenticated admin fails validation when edit makes both team mongo Ids the same', async () => {
+    await testRedis.set(id, validSession)
+    const createResult = await request
+      .post('/api/fixtures')
+      .set('Authorization', `Bearer ${validToken}`)
+      .send(defaultFixture)
+
+    const publicId = createResult.body.data.publicId
+    const result = await request
+      .patch(`/api/fixtures/${publicId}`)
+      .set('Authorization', `Bearer ${validToken}`)
+      .send({
+        awayTeam: defaultFixture.homeTeam,
+      })
+
+    expect(createResult.statusCode).toBe(201)
     expect(result.statusCode).toBe(400)
     expect(result.body).toEqual({
       errors: expect.arrayContaining([
         {
           message: 'home and away team cannot be the same',
-          field: '',
         },
       ]),
       isSuccess: false,
     })
   })
 
-  test('Fixture creation with authenticated admin fails when homeTeam or awayTeam mongo Ids are invalid', async () => {
+  test('Editing fixture succeeds when all requirements are met', async () => {
     await testRedis.set(id, validSession)
-
-    const result = await request
+    const createResult = await request
       .post('/api/fixtures')
       .set('Authorization', `Bearer ${validToken}`)
-      .send({
-        homeTeam: 'invalidId1',
-        awayTeam: 'invalidId2',
-        status: 'completed',
-        date: `10/10/${new Date().getFullYear() + 1}`,
-      })
+      .send(defaultFixture)
 
-    expect(result.statusCode).toBe(400)
-    expect(result.body).toEqual({
-      errors: expect.arrayContaining([
-        {
-          message: 'Invalid homeTeam',
-          field: 'homeTeam',
-        },
-      ]),
-      isSuccess: false,
-    })
-  })
-
-  test('Fixture creation succeeds when all requirements are met', async () => {
-    await testRedis.set(id, validSession)
-
-    const day = 10
+    const publicId = createResult.body.data.publicId
+    const day = 12
     const month = 10
     const year = new Date().getFullYear() + 1
+    const defaultDay = +defaultFixture.date.split('/')[0]
 
-    const fixture = {
-      homeTeam: '63bd75b6c3398c4ebdccd30e',
-      awayTeam: '63bd84a457c871dd8ce30d25',
+    const update = {
+      awayTeam: defaultFixture.homeTeam,
+      homeTeam: defaultFixture.awayTeam,
       status: 'completed',
       date: `${day}/${month}/${year}`,
     }
-    const result = await request
-      .post('/api/fixtures')
-      .set('Authorization', `Bearer ${validToken}`)
-      .send(fixture)
 
-    expect(result.statusCode).toBe(201)
-    expect(result.body.data.link).toMatch(result.body.data.publicId)
-    expect(new Date(result.body.data.date).getMonth()).toBe(month - 1)
-    expect(new Date(result.body.data.date).toString()).toMatch('Oct')
+    const result = await request
+      .patch(`/api/fixtures/${publicId}`)
+      .set('Authorization', `Bearer ${validToken}`)
+      .send(update)
+
+    expect(createResult.statusCode).toBe(201)
+    expect(result.statusCode).toBe(200)
+    expect(new Date(result.body.data.date).getDate()).toBe(day)
+    expect(new Date(result.body.data.date).getDate()).not.toBe(defaultDay)
     expect(result.body).toEqual({
       data: expect.objectContaining({
-        homeTeam: fixture.homeTeam,
-        awayTeam: fixture.awayTeam,
-        status: fixture.status,
+        awayTeam: update.awayTeam,
+        homeTeam: update.homeTeam,
+        status: update.status,
       }),
       isSuccess: true,
     })

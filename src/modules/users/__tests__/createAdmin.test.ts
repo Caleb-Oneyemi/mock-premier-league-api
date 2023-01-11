@@ -1,7 +1,7 @@
 import supertest from 'supertest'
 import { app } from '../../../app'
 import { generateToken, UserTypes } from '../../../common'
-import { testRedis } from '../../../test/redis'
+import { testRedis } from '../../../test/helpers'
 
 const request = supertest(app)
 

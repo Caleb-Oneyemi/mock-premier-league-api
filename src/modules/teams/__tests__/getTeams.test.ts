@@ -1,7 +1,7 @@
 import supertest from 'supertest'
-import { app } from '../../../app'
 import { Team } from '../models'
-import teams from './teams.json'
+import { app } from '../../../app'
+import { teams } from '../../../test/helpers'
 
 const request = supertest(app)
 

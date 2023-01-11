@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { testRedis } from './redis'
+import { testRedis } from './helpers'
 
 beforeAll(async () => {
   await mongoose.connect(process.env.MONGO_URL!)

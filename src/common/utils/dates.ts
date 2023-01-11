@@ -8,6 +8,10 @@ export const isValidFormat = (date: string) => {
   if (date.length !== 10) return false
 
   const [day, month, year] = date.split('/')
+  if (day.length !== 2 || month.length !== 2 || year.length !== 4) {
+    return false
+  }
+
   if (isNaN(+day) || isNaN(+month) || isNaN(+year)) {
     return false
   }

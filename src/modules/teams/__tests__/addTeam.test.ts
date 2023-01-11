@@ -23,7 +23,7 @@ describe('Add Team Tests', () => {
     })
   })
 
-  test('Team creation fails validation when authenticated user is not an admin', async () => {
+  test('Team creation fails when authenticated user is not an admin', async () => {
     const id = 'publicId'
     const token = generateToken(id)
     const sessionValue = JSON.stringify({

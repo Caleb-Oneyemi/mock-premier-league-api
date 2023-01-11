@@ -5,16 +5,16 @@ import { testRedis } from '../../../test/helpers'
 
 const request = supertest(app)
 
-const id = 'deleteTeamId'
+const id = 'deleteFixtureId'
 const validToken = generateToken(id)
 const validSession = JSON.stringify({
-  username: 'deleteTeam',
+  username: 'deleteFixture',
   role: UserTypes.ADMIN_USER,
 })
 
-describe('Delete Team Tests', () => {
-  test('Deleting team fails when user is not authenticated', async () => {
-    const result = await request.delete('/api/teams/publicId').send()
+describe('Delete Fixture Tests', () => {
+  test('Deleting fixture fails when user is not authenticated', async () => {
+    const result = await request.delete('/api/fixtures/publicId').send()
 
     expect(result.statusCode).toBe(401)
     expect(result.body).toEqual({
@@ -23,7 +23,7 @@ describe('Delete Team Tests', () => {
     })
   })
 
-  test('Deleting team fails when authenticated user is not an admin', async () => {
+  test('Deleting fixture fails when authenticated user is not an admin', async () => {
     const token = generateToken(id)
     const sessionValue = JSON.stringify({
       username: 'username',
@@ -33,7 +33,7 @@ describe('Delete Team Tests', () => {
     await testRedis.set(id, sessionValue)
 
     const result = await request
-      .delete(`/api/teams/${id}`)
+      .delete(`/api/fixtures/${id}`)
       .set('Authorization', `Bearer ${token}`)
       .send()
 
@@ -44,11 +44,11 @@ describe('Delete Team Tests', () => {
     })
   })
 
-  test('Deleting team with authenticated admin fails when team with publicId does not exist', async () => {
+  test('Deleting fixture with authenticated admin fails when fixture with publicId does not exist', async () => {
     await testRedis.set(id, validSession)
 
     const result = await request
-      .delete(`/api/teams/${id}`)
+      .delete(`/api/fixtures/${id}`)
       .set('Authorization', `Bearer ${validToken}`)
       .send()
 
@@ -56,30 +56,30 @@ describe('Delete Team Tests', () => {
     expect(result.body).toEqual({
       errors: [
         {
-          message: 'team does not exist',
+          message: 'fixture does not exist',
         },
       ],
       isSuccess: false,
     })
   })
 
-  test('Deleting team with authenticated admin succeeds when team exists', async () => {
+  test('Deleting fixture with authenticated admin succeeds when fixture exists', async () => {
     await testRedis.set(id, validSession)
-    const team = {
-      name: 'manchester_united',
-      foundingYear: 1995,
-      stadium: 'old trafford',
-      owner: 'owner',
+    const fixture = {
+      homeTeam: '63bd75b6c3398c4ebdccd30e',
+      awayTeam: '63bd84a457c871dd8ce30d25',
+      status: 'pending',
+      date: `10/10/${new Date().getFullYear() + 1}`,
     }
 
     const { statusCode, body } = await request
-      .post('/api/teams')
+      .post('/api/fixtures')
       .set('Authorization', `Bearer ${validToken}`)
-      .send(team)
+      .send(fixture)
 
     const publicId = body.data.publicId
     const result = await request
-      .delete(`/api/teams/${publicId}`)
+      .delete(`/api/fixtures/${publicId}`)
       .set('Authorization', `Bearer ${validToken}`)
       .send()
 

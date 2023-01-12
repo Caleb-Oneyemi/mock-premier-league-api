@@ -19,7 +19,7 @@ export const isValidFormat = (date: string) => {
   return true
 }
 
-export const isValidDate = (date: string) => {
+export const isValidDate = (date: string, isFuture = true) => {
   const [day, month] = date.split('/')
   if (+day < 1 || +day > 31) {
     return false
@@ -29,7 +29,7 @@ export const isValidDate = (date: string) => {
     return false
   }
 
-  if (buildDate(date) < new Date()) {
+  if (isFuture && buildDate(date) < new Date()) {
     return false
   }
 

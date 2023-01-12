@@ -63,12 +63,12 @@ export const getFixturesSchema = genericQuerySchema
       .string()
       .trim()
       .refine(isValidFormat, 'date must be in the format DD/MM/YYYY')
-      .refine(isValidDate, 'date must be a valid date in the future'),
+      .refine((date) => isValidDate(date, false), 'date must be a valid date'),
     dateBefore: z
       .string()
       .trim()
       .refine(isValidFormat, 'date must be in the format DD/MM/YYYY')
-      .refine(isValidDate, 'date must be a valid date in the future'),
+      .refine((date) => isValidDate(date, false), 'date must be a valid date'),
   })
   .strict()
   .partial()

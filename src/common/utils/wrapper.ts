@@ -14,7 +14,7 @@ export const wrapCtrl = (status: number, fn: ControllerFn) => {
         query,
         user,
         method,
-        url,
+        originalUrl: url,
         useCache,
         clearCache,
         hashKey,
@@ -22,7 +22,7 @@ export const wrapCtrl = (status: number, fn: ControllerFn) => {
 
       let result
       if (method.toLowerCase() === 'get' && useCache && hashKey) {
-        result = await getCachedResponse(hashKey, req.url)
+        result = await getCachedResponse(hashKey, url)
 
         if (result != null) {
           return res.status(status).send({
